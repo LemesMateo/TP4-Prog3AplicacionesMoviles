@@ -1,0 +1,122 @@
+﻿@implements IDisposable
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="">
+            <span class="bi bi-bag-fill" aria-hidden="true"></span>
+            TP4 — ProgMoviles
+        </a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler-checkbox" @bind="collapseNavMenu" />
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="CloseMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill" aria-hidden="true"></span> Inicio
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="products">
+                <span class="bi bi-bag-fill" aria-hidden="true"></span> Productos
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="products/create">
+                <span class="bi bi-plus-square-fill" aria-hidden="true"></span> Crear producto
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3 categories-section">
+            <div class="nav-section-title text-muted small text-uppercase mt-3 mb-1 px-2">
+                <span class="bi bi-tags-fill" aria-hidden="true"></span> Categorías
+            </div>
+            @if (loadingCategories)
+            {
+                <div class="px-3 text-muted small"><em>Cargando...</em></div>
+            }
+            else if (categories.Count == 0)
+            {
+                <div class="px-3 text-muted small">Sin categorías</div>
+            }
+            else
+            {
+                @foreach (var c in categories)
+                {
+                    <NavLink class="nav-link nav-link-sub"
+                             href="@($"products/category/{Uri.EscapeDataString(c)}")">
+                        <span class="bi bi-chevron-right" aria-hidden="true"></span> @c
+                    </NavLink>
+                }
+            }
+        </div>
+
+        <div class="nav-item px-3 mt-3">
+            <NavLink class="nav-link" href="about">
+                <span class="bi bi-info-circle-fill" aria-hidden="true"></span> Acerca de
+            </NavLink>
+        </div>
+    </nav>
+
+    <div class="nav-footer px-3 py-3 text-muted small">
+        <hr class="text-light" />
+        <div>TP4 — ProgMoviles</div>
+        <div class="text-light-50">.NET 9 · MAUI · Blazor</div>
+    </div>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private List<string> categories = new();
+    private bool loadingCategories = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            categories = await CategoryService.GetAllAsync();
+        }
+        catch
+        {
+            // If the API is unreachable, leave the list empty.
+            categories = new List<string>();
+        }
+        finally
+        {
+            loadingCategories = false;
+        }
+    }
+
+    private void ToggleNav()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void CloseMenu()
+    {
+        collapseNavMenu = true;
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        // Close the menu after navigation on mobile widths.
+        collapseNavMenu = true;
+        InvokeAsync(StateHasChanged);
+    }
+}

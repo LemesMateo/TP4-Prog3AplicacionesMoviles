@@ -1,0 +1,48 @@
+# Build results
+bin/
+obj/
+out/
+build/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.swp
+*.swo
+*.tmp
+
+# .NET / MAUI
+*.dll
+*.pdb
+*.exe
+*.cache
+*.log
+*.lock.json
+project.lock.json
+project.assets.json
+TestResults/
+
+# Generated MAUI assets
+Resources/Generated/
+*.binlog
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets / local config
+appsettings.*.local.json
+*.env
+*.env.*
+secrets.json
+
+# Node / npm (if any frontend tooling is added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

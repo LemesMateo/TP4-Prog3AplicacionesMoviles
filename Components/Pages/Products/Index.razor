@@ -1,0 +1,121 @@
+@page "/products"
+@inject IProductService ProductService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+<PageTitle>Productos</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Productos</h1>
+    <a class="btn btn-success" href="products/create">
+        <span class="bi bi-plus-square" aria-hidden="true"></span> Crear producto
+    </a>
+</div>
+
+<p class="text-muted">
+    Listado completo de productos consumidos desde
+    <code>GET https://fakestoreapi.com/products</code>.
+</p>
+
+@if (loading)
+{
+    <p><em>Cargando productos...</em></p>
+}
+else if (error is not null)
+{
+    <div class="alert alert-danger" role="alert">@error</div>
+}
+else if (products.Count == 0)
+{
+    <div class="alert alert-info" role="alert">No hay productos para mostrar.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 80px;">Imagen</th>
+                    <th>Título</th>
+                    <th class="text-end">Precio</th>
+                    <th>Categoría</th>
+                    <th class="text-end" style="width: 240px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in products)
+                {
+                    <tr>
+                        <td>
+                            <img src="@p.Image" alt="@p.Title"
+                                 style="width: 60px; height: 60px; object-fit: contain;" />
+                        </td>
+                        <td>@p.Title</td>
+                        <td class="text-end">$@p.Price.ToString("0.00")</td>
+                        <td><span class="badge bg-secondary">@p.Category</span></td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary"
+                               href="@($"products/details/{p.Id}")">
+                                <span class="bi bi-eye" aria-hidden="true"></span> Ver
+                            </a>
+                            <a class="btn btn-sm btn-outline-warning"
+                               href="@($"products/edit/{p.Id}")">
+                                <span class="bi bi-pencil" aria-hidden="true"></span> Editar
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteAsync(p)">
+                                <span class="bi bi-trash" aria-hidden="true"></span> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Product> products = new();
+    private bool loading = true;
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        loading = true;
+        error = null;
+        try
+        {
+            products = await ProductService.GetAllAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            products = new List<Product>();
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task DeleteAsync(Product product)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm",
+            $"¿Eliminar el producto \"{product.Title}\"?");
+        if (!confirmed) return;
+
+        try
+        {
+            await ProductService.DeleteAsync(product.Id);
+            await LoadAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

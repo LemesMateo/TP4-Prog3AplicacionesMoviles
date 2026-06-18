@@ -1,0 +1,29 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <span class="app-bar-title">
+                <span class="bi bi-bag-fill" aria-hidden="true"></span>
+                <strong>TP4 — ProgMoviles</strong>
+            </span>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span class="badge bg-success-subtle text-success-emphasis connection-badge"
+                      title="Cliente HTTP configurado en MauiProgram.cs">
+                    <span class="bi bi-cloud-check" aria-hidden="true"></span> FakeStoreAPI listo
+                </span>
+                <a class="btn btn-sm btn-outline-secondary" href="about">
+                    <span class="bi bi-info-circle" aria-hidden="true"></span> Acerca de
+                </a>
+            </div>
+        </div>
+
+        <article class="content px-4 py-4">
+            @Body
+        </article>
+    </main>
+</div>

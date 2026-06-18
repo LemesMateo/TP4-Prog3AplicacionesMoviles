@@ -1,0 +1,35 @@
+@page "/about"
+
+<PageTitle>Acerca de</PageTitle>
+
+<h1>Acerca de</h1>
+<p class="lead">
+    TP4 — ProgMoviles: Trabajo Práctico N° 4 de la materia Programación Móvil.
+</p>
+
+<h2 class="mt-4">¿Qué hace la app?</h2>
+<p>
+    Esta es una aplicación <strong>Blazor Hybrid MAUI</strong> escrita en C# / .NET 9
+    que consume la API pública <a href="https://fakestoreapi.com/" target="_blank" rel="noopener">FakeStoreAPI</a>
+    para demostrar el uso de <code>HttpClient</code> con los verbos
+    <span class="badge bg-primary">GET</span>
+    <span class="badge bg-success">POST</span>
+    <span class="badge bg-warning text-dark">PUT</span>
+    <span class="badge bg-danger">DELETE</span>.
+</p>
+
+<h2 class="mt-4">Arquitectura</h2>
+<ul>
+    <li><strong>Modelos</strong>: <code>Models/Product.cs</code> — DTO que refleja el contrato JSON de la API.</li>
+    <li><strong>Servicios</strong>: <code>Services/IProductService.cs</code>, <code>ProductService.cs</code>, <code>ICategoryService.cs</code>, <code>CategoryService.cs</code> — encapsulan las llamadas HTTP vía <code>IHttpClientFactory</code>.</li>
+    <li><strong>Páginas</strong>: 5 páginas Blazor en <code>Components/Pages/Products/</code> (Index, Details, Create, Edit, CategoryFilter) más <code>Home.razor</code> y <code>About.razor</code>.</li>
+    <li><strong>Layout</strong>: <code>MainLayout.razor</code> + <code>NavMenu.razor</code> (reescritos) con un shell propio.</li>
+    <li><strong>DI</strong>: <code>MauiProgram.cs</code> registra el cliente HTTP nombrado <code>"FakeStoreApi"</code> y los servicios como <code>Scoped</code>.</li>
+</ul>
+
+<h2 class="mt-4">Endpoints consumidos</h2>
+<p>
+    El detalle página↔endpoint está documentado en
+    <a href="https://github.com/" target="_blank" rel="noopener"><code>docs/API.md</code></a>
+    del repositorio del proyecto.
+</p>

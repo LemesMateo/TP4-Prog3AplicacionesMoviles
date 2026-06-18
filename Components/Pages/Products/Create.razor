@@ -1,0 +1,142 @@
+@page "/products/create"
+@inject IProductService ProductService
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<PageTitle>Crear producto</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Crear producto</h1>
+    <a class="btn btn-secondary" href="products">← Cancelar</a>
+</div>
+
+<p class="text-muted">
+    Envía un <code>POST https://fakestoreapi.com/products</code> con los datos del formulario.
+</p>
+
+@if (error is not null)
+{
+    <div class="alert alert-danger" role="alert">@error</div>
+}
+
+@if (created is not null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">¡Producto creado!</h4>
+        <p>La API devolvió el siguiente objeto (con el <code>id</code> asignado):</p>
+        <ul class="mb-3">
+            <li><strong>ID:</strong> @created.Id</li>
+            <li><strong>Título:</strong> @created.Title</li>
+            <li><strong>Precio:</strong> $@created.Price.ToString("0.00")</li>
+            <li><strong>Categoría:</strong> @created.Category</li>
+        </ul>
+        <a class="btn btn-primary" href="products">Volver al listado</a>
+        <button class="btn btn-outline-success" @onclick="ResetForm">Crear otro</button>
+    </div>
+}
+
+<EditForm Model="model" OnValidSubmit="SubmitAsync" class="card shadow-sm p-4">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Título</label>
+        <InputText class="form-control" @bind-Value="model.Title" />
+        <ValidationMessage For="() => model.Title" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Precio</label>
+            <InputNumber class="form-control" @bind-Value="model.Price" />
+            <ValidationMessage For="() => model.Price" />
+        </div>
+        <div class="col-md-8 mb-3">
+            <label class="form-label">Categoría</label>
+            @if (categories.Count == 0)
+            {
+                <InputText class="form-control" @bind-Value="model.Category" placeholder="ej: electronics" />
+            }
+            else
+            {
+                <InputSelect class="form-select" @bind-Value="model.Category">
+                    <option value="">-- Seleccionar --</option>
+                    @foreach (var c in categories)
+                    {
+                        <option value="@c">@c</option>
+                    }
+                </InputSelect>
+            }
+            <ValidationMessage For="() => model.Category" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">URL de imagen</label>
+        <InputText class="form-control" @bind-Value="model.Image" placeholder="https://..." />
+        <ValidationMessage For="() => model.Image" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <InputTextArea class="form-control" rows="4" @bind-Value="model.Description" />
+        <ValidationMessage For="() => model.Description" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@submitting">
+        @if (submitting)
+        {
+            <span>Enviando...</span>
+        }
+        else
+        {
+            <span><span class="bi bi-send" aria-hidden="true"></span> Crear</span>
+        }
+    </button>
+</EditForm>
+
+@code {
+    private Product model = new();
+    private List<string> categories = new();
+    private Product? created;
+    private bool submitting;
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            categories = await CategoryService.GetAllAsync();
+        }
+        catch
+        {
+            // If categories fail, we fall back to a free-text input.
+            categories = new List<string>();
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        submitting = true;
+        error = null;
+        try
+        {
+            created = await ProductService.CreateAsync(model);
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            submitting = false;
+        }
+    }
+
+    private void ResetForm()
+    {
+        model = new Product();
+        created = null;
+        error = null;
+    }
+}

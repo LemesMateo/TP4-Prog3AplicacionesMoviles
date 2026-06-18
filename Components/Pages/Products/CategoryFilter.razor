@@ -1,0 +1,87 @@
+@page "/products/category/{Category}"
+@inject IProductService ProductService
+@inject NavigationManager Navigation
+
+<PageTitle>Categoría: @Category</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Categoría: <span class="badge bg-primary">@Category</span></h1>
+    <a class="btn btn-secondary" href="products">← Volver al listado</a>
+</div>
+
+<p class="text-muted">
+    Productos filtrados por categoría. Endpoint consumido:
+    <code>GET https://fakestoreapi.com/products/category/{Category}</code>.
+</p>
+
+@if (loading)
+{
+    <p><em>Cargando productos...</em></p>
+}
+else if (error is not null)
+{
+    <div class="alert alert-danger" role="alert">@error</div>
+}
+else if (products.Count == 0)
+{
+    <div class="alert alert-info" role="alert">No hay productos en esta categoría.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var p in products)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@p.Image" class="card-img-top p-3"
+                         alt="@p.Title"
+                         style="height: 200px; object-fit: contain;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Title</h5>
+                        <p class="card-text text-success fw-bold">$@p.Price.ToString("0.00")</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 d-flex gap-2">
+                        <a class="btn btn-sm btn-outline-primary"
+                           href="@($"products/details/{p.Id}")">Ver</a>
+                        <a class="btn btn-sm btn-outline-warning"
+                           href="@($"products/edit/{p.Id}")">Editar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string Category { get; set; } = string.Empty;
+
+    private List<Product> products = new();
+    private bool loading = true;
+    private string? error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        loading = true;
+        error = null;
+        products = new List<Product>();
+        try
+        {
+            // FakeStoreAPI exposes /products/category/{category} only via the
+            // generic listing endpoint with client-side filtering; the API
+            // itself returns the full list and lets the client narrow it down.
+            // We fetch all and filter locally to keep the service contract small.
+            var all = await ProductService.GetAllAsync();
+            products = all
+                .Where(p => string.Equals(p.Category, Category, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

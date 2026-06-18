@@ -1,0 +1,98 @@
+/* Custom main-layout styling for TP4 — ProgMoviles. */
+
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: #15151f;
+}
+
+main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7fb;
+}
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.app-bar-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1e1e2f;
+    font-size: 1rem;
+}
+
+.app-bar-title .bi {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 0;
+}
+
+.connection-badge {
+    font-weight: 500;
+    border: 1px solid rgba(25, 135, 84, 0.25);
+    padding: 0.4rem 0.65rem;
+}
+
+.connection-badge .bi {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+    background-image: none;
+}
+
+.content {
+    flex: 1;
+}
+
+@media (max-width: 640.98px) {
+    .page {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+}
+
+/* Preserve the default Blazor error UI. */
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

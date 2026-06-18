@@ -1,0 +1,59 @@
+﻿@page "/"
+
+<PageTitle>TP4 — ProgMoviles · Inicio</PageTitle>
+
+<section class="hero bg-primary text-white p-5 rounded shadow-sm mb-4">
+    <h1 class="display-4 fw-bold">TP4 — ProgMoviles</h1>
+    <p class="lead mb-0">
+        App Blazor Hybrid MAUI que consume la API pública
+        <a href="https://fakestoreapi.com/" target="_blank" rel="noopener" class="link-light fw-bold">FakeStoreAPI</a>
+        con operaciones <strong>GET</strong>, <strong>POST</strong>, <strong>PUT</strong> y <strong>DELETE</strong>.
+    </p>
+</section>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="bi bi-bag-fill" aria-hidden="true"></span> Productos
+                </h5>
+                <p class="card-text">
+                    Listado, alta, edición y baja de productos consumidos en vivo desde FakeStoreAPI.
+                </p>
+                <a class="btn btn-primary" href="products">Ir al listado</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="bi bi-info-circle-fill" aria-hidden="true"></span> Cómo funciona
+                </h5>
+                <p class="card-text">
+                    Detalles del proyecto, decisiones de arquitectura y endpoints consumidos por cada página.
+                </p>
+                <a class="btn btn-outline-primary" href="about">Ver más</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="bi bi-cloud-arrow-down-fill" aria-hidden="true"></span> FakeStoreAPI
+                </h5>
+                <p class="card-text">
+                    <code>https://fakestoreapi.com/</code> — API REST fake de e-commerce para prototipos.
+                </p>
+                <a class="btn btn-outline-primary"
+                   href="https://fakestoreapi.com/docs" target="_blank" rel="noopener">
+                    Documentación oficial
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

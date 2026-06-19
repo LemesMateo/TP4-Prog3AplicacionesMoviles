@@ -34,14 +34,16 @@ App **Blazor Hybrid MAUI** escrita en C# / .NET 9 que consume la API pública
 # Restaurar dependencias
 dotnet restore
 
-# Compilar y ejecutar en Windows
-dotnet run -f net9.0-windows10.0.19041.0
+# Compilar y ejecutar (en Windows, sin necesidad de -f gracias al TFM por defecto)
+dotnet run
 ```
 
 La ventana de MAUI Blazor se abrirá mostrando la landing. Desde el menú
 lateral se puede navegar a **Productos** para empezar a probar el CRUD.
 
-> Para otras plataformas, usar el target correspondiente, p. ej.
+> El proyecto define `net9.0-windows10.0.19041.0` como TFM por defecto, así
+> que `dotnet run` funciona sin argumentos. Para compilar para otra
+> plataforma usá el parámetro `-f`, por ejemplo:
 > `dotnet build -f net9.0-android` (necesita el SDK de Android y un emulador).
 
 ## Estructura del proyecto
@@ -110,4 +112,4 @@ Ver [`docs/API.md`](docs/API.md) para la tabla completa.
 
 ## Autor
 
-- **Mateo Ezequiel Lemes** — Trabajo Práctico N° 4, Programación Móvil.
+- **Mateo Ezequiel Lemes** — Trabajo Práctico N° 4, Programación III - Aplicaciones Móviles.

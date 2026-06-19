@@ -3,6 +3,10 @@
     "Windows Machine": {
       "commandName": "Project",
       "nativeDebugging": false
+    },
+    "Android Machine": {
+      "commandName": "Project",
+      "launchBrowser": false
     }
   }
 }

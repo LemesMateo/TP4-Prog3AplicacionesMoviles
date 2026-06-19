@@ -2,13 +2,13 @@
 
     <PropertyGroup>
         <!--
-            TP4 — ProgMoviles: single-target by default so `dotnet run` "just works"
-            on Windows without needing `-f`. If you need to build other platforms,
-            use `dotnet build -f net9.0-android` (and re-add the multi-target via
-            -p:TargetFrameworks=...). See the README for details.
+            TP4 — ProgMoviles: multi-target so Visual Studio shows both
+            "Windows Machine" and "Android Machine" in the target selector.
+            `dotnet run` defaults to Windows. For Android, use:
+              dotnet run -f net9.0-android
+            or select Android Machine in Visual Studio.
         -->
-        <TargetFramework Condition="'$(TargetFramework)' == ''">net9.0-windows10.0.19041.0</TargetFramework>
-        <TargetFrameworks Condition="'$(TargetFrameworks)' != ''">$(TargetFrameworks)</TargetFrameworks>
+        <TargetFrameworks>net9.0-windows10.0.19041.0;net9.0-android</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 

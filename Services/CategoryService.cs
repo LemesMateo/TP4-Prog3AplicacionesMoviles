@@ -4,32 +4,28 @@ using System.Net.Http.Json;
 namespace TP4_ProgMoviles.Services;
 
 /// <summary>
-/// HTTP-backed implementation of <see cref="ICategoryService"/>.
-/// Uses the named HttpClient <c>"FakeStoreApi"</c> registered in
-/// <see cref="MauiProgram"/>.
+/// Returns the list of distinct product categories from the local
+/// <see cref="ProductStore"/>. We derive them client-side so the NavMenu
+/// updates automatically when a user creates a product in a new
+/// category.
 /// </summary>
 public class CategoryService : ICategoryService
 {
-    private const string HttpClientName = "FakeStoreApi";
+    private readonly ProductStore _store;
 
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public CategoryService(IHttpClientFactory httpClientFactory)
+    public CategoryService(ProductStore store)
     {
-        _httpClientFactory = httpClientFactory;
+        _store = store;
     }
 
     public async Task<List<string>> GetAllAsync()
     {
-        try
-        {
-            var client = _httpClientFactory.CreateClient(HttpClientName);
-            var categories = await client.GetFromJsonAsync<List<string>>("products/categories");
-            return categories ?? new List<string>();
-        }
-        catch (HttpRequestException ex)
-        {
-            throw new InvalidOperationException($"No se pudieron obtener las categorías: {ex.Message}", ex);
-        }
+        var products = await _store.GetAllAsync();
+        return products
+            .Select(p => p.Category)
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(c => c)
+            .ToList();
     }
 }

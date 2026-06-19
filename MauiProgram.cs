@@ -17,7 +17,7 @@ namespace TP4_ProgMoviles
 
             builder.Services.AddMauiBlazorWebView();
 
-            // TP4 — FakeStoreAPI: named HttpClient + scoped services.
+            // TP4 — FakeStoreAPI: named HttpClient + local store.
             // AddHttpClient registers an IHttpClientFactory under the hood;
             // services inject the factory and call CreateClient("FakeStoreApi")
             // per request to avoid socket exhaustion.
@@ -26,6 +26,10 @@ namespace TP4_ProgMoviles
                 c.BaseAddress = new Uri("https://fakestoreapi.com/");
                 c.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+            // ProductStore is a SINGLETON so the in-memory + on-disk snapshot
+            // is shared across every Razor page. The other services stay
+            // Scoped because they only depend on the singleton.
+            builder.Services.AddSingleton<ProductStore>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
 

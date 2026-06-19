@@ -2,6 +2,20 @@
 
 <PageTitle>TP4 — ProgMoviles · Inicio</PageTitle>
 
+<div class="alert alert-warning d-flex align-items-start" role="alert">
+    <span class="bi bi-exclamation-triangle-fill me-2 fs-5" aria-hidden="true"></span>
+    <div>
+        <strong>FakeStoreAPI es un mock.</strong>
+        La API responde <code>200/201</code> a las operaciones
+        <code>POST</code>/<code>PUT</code>/<code>DELETE</code> pero
+        <strong>no persiste los cambios</strong> en el servidor.
+        Esta app mantiene los cambios en un
+        <strong>store local</strong>
+        (<code>FileSystem.AppDataDirectory/products.local.json</code>)
+        para que la UI funcione como un CRUD real entre reinicios.
+    </div>
+</div>
+
 <section class="hero bg-primary text-white p-5 rounded shadow-sm mb-4">
     <h1 class="display-4 fw-bold">TP4 — ProgMoviles</h1>
     <p class="lead mb-0">
